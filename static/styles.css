@@ -1,16 +1,25 @@
-/* General Styles */
-body {
-    font-family: 'Arial', sans-serif;
+/* General Variables */
+:root {
+    --maroon: #501214;
+    --maroon-light: #701a1a;
+    --white: #ffffff;
+    --gray-light: #f4f4f4;
+    --gray-dark: #333333;
+  }
+  
+  /* General Styles */
+  body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333333;
+    background-color: var(--gray-light);
+    color: var(--gray-dark);
   }
   
   /* Header */
   header {
-    background-color: #7f0000;
-    color: #ffffff;
+    background-color: var(--maroon);
+    color: var(--white);
     padding: 1.5rem;
     text-align: center;
   }
@@ -29,22 +38,18 @@ body {
     gap: 1rem;
   }
   
-  nav ul li {
-    margin: 0;
-  }
-  
   nav ul li a {
-    color: #ffffff;
+    color: var(--white);
     text-decoration: none;
     font-weight: bold;
     padding: 0.5rem 1rem;
-    border: 1px solid #ffffff;
+    border: 1px solid var(--white);
     border-radius: 4px;
     transition: background-color 0.3s;
   }
   
   nav ul li a:hover {
-    background-color: #a62828;
+    background-color: var(--maroon-light);
   }
   
   /* Main Content */
@@ -57,24 +62,25 @@ body {
   section {
     margin-bottom: 2rem;
     padding: 1.5rem;
-    background-color: #ffffff;
+    background-color: var(--white);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
   section h2 {
     margin-top: 0;
-    color: #7f0000;
+    color: var(--maroon);
   }
   
-  section p {
+  section p,
+  section ul {
     line-height: 1.6;
   }
   
   /* Footer */
   footer {
-    background-color: #333333;
-    color: #ffffff;
+    background-color: var(--maroon);
+    color: var(--white);
     text-align: center;
     padding: 1rem;
   }
@@ -86,8 +92,8 @@ body {
   
   /* Buttons */
   button {
-    background-color: #7f0000;
-    color: #ffffff;
+    background-color: var(--maroon);
+    color: var(--white);
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 4px;
@@ -97,7 +103,7 @@ body {
   }
   
   button:hover {
-    background-color: #a62828;
+    background-color: var(--maroon-light);
   }
   
   /* Forms */
