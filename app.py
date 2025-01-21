@@ -5,8 +5,8 @@ app.secret_key = "supersecretkey"
 
 # Route for the homepage
 @app.route("/")
-def index():
-    return render_template("index.html")
+def home():
+    return render_template("home.html")
 
 # Route for the login page
 @app.route("/login", methods=["GET", "POST"])

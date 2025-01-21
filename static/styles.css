@@ -77,6 +77,10 @@
   section p {
     line-height: 1.6;
   }
+
+  .section-left {
+    text-align: left;
+  }
   
   /* Forms */
   form {
