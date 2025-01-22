@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect
+from flask import Blueprint, render_template, request, flash, redirect, session, url_for
 
 login_bp = Blueprint("login", __name__)
 
@@ -10,8 +10,9 @@ def login():
         
         # Dummy authentication
         if username == "admin" and password == "password":
+            session["user"]=username
             flash("Login successful!", "success")
-            return redirect("/")
+            return redirect(url_for("hub.html"))
         else:
             flash("Invalid username or password.", "error")
     return render_template("login.html")
