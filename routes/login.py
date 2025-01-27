@@ -12,13 +12,13 @@ def login():
         if username == "admin" and password == "password":
             session["user"]=username
             flash("Login successful!", "success")
-            return redirect("/hub")
+            return redirect(url_for("hub.hub"))
         else:
             flash("Invalid username or password.", "error")
     return render_template("login.html")
 
 @login_bp.route("/logout")
 def logout():
-    session.pop("user", None)  # Remove the user from the session
+    session.pop("user", None)  
     flash("You have been logged out.", "info")
-    return redirect("/login")  # Redirect to the login page
+    return redirect("/login")  
