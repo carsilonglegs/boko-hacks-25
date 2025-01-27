@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, session, redirect, url_for
-print("hub blueprint loaded")
+
 hub_bp = Blueprint("hub", __name__)
 
 
@@ -10,4 +10,4 @@ def hub():
         return render_template("hub.html", username=session["user"])
     else:
         # Redirect to login page if not logged in
-        return redirect("/login")
+        return redirect(url_for("login.login"))
