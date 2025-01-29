@@ -7,8 +7,26 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Welcome to the Hub, {{ username }}!</h1>
-    <p>This is your private dashboard, accessible only after logging in.</p>
-    <a href="{{ url_for('login.logout') }}">Logout</a>
+    <!-- Header Section -->
+    <header class="dashboard-header">
+        <h1>Welcome Admin, {{ username }}</h1>
+    </header>
+    
+    <!-- Search and Logout Section -->
+    <div class="search-logout-container">
+        <form class="search-bar" method="GET" action="{{ url_for('hub.hub') }}">
+            <input type="text" name="query" placeholder="Search..." value="{{ request.args.get('query', '') }}">
+            <button type="submit">Search</button>
+        </form>
+        <a href="{{ url_for('login.logout') }}" class="logout-link">Logout</a>
+    </div>
+
+    <!-- Dashboard Content -->
+    <main>
+        <section class="dashboard-content">
+            <h2 class="section-left">Dashboard</h2>
+            <!-- Apps or content will go here in the future -->
+        </section>
+    </main>
 </body>
 </html>
