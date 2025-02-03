@@ -3,41 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/static/styles.css">
-  <title>Boko Hacks</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <title>Home - BokoHacks</title>
 </head>
 <body>
   <header>
-    <h1>Boko Hacks</h1>
+    <h1>Welcome to BokoHacks</h1>
     <nav>
       <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/register">Register</a></li>
-        <li><a href="/about">About</a></li>
+        <li><a href="{{ url_for('home.home') }}" class="active">Home</a></li>
+        <li><a href="{{ url_for('login.login') }}">Login</a></li>
+        <li><a href="{{ url_for('register.register') }}">Register</a></li>
+        <li><a href="{{ url_for('about.about') }}">About</a></li>
       </ul>
     </nav>
   </header>
   <main>
-    <section class="section-left">
-      <h2>About the Challenge</h2>
-      <p>
-        Test your cybersecurity skills by identifying and fixing vulnerabilities in this web application.
-        Work through challenges, improve security, and gain hands-on experience.
-      </p>
-    </section>
-    <section class="section-left">
-      <h2>Features</h2>
-      <ul>
-        <li>Interactive Blog and Forum</li>
-        <li>Task Management with To-Do Lists</li>
-        <li>Real-Time Weather App</li>
-        <li>E-Commerce Simulation</li>
-      </ul>
+    <section>
+      <h2>Join the Challenge</h2>
+      <p>Test your cybersecurity and ethical hacking skills.</p>
+      <a href="{{ url_for('login.login') }}"><button>Login</button></a>
+      <a href="{{ url_for('register.register') }}"><button>Register</button></a>
     </section>
   </main>
   <footer>
-    <p>&copy; 2025 Boko Hacks | All Rights Reserved</p>
+    <p>&copy; 2025 BokoHacks | All Rights Reserved</p>
   </footer>
 </body>
 </html>
