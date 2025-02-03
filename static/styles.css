@@ -238,3 +238,104 @@
   color: var(--gray-dark);
   font-weight: bold;
 }
+
+/* Add to styles.css */
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.app-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: var(--gray-dark);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent;
+}
+
+.app-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-color: var(--maroon);
+}
+
+.app-card h3 {
+  color: var(--maroon);
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+}
+
+.app-card p {
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.difficulty {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  background: var(--gray-light);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--gray-dark);
+}
+
+/* Add to styles.css */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  background-color: var(--white);
+  margin: 2rem auto;
+  padding: 0;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--maroon);
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray-dark);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.app-container {
+  min-height: 400px;
+}

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
     <!-- Header Section -->
     <header class="dashboard-header">
         <h1>Welcome Admin, {{ username }}</h1>
@@ -24,8 +25,43 @@
     <!-- Dashboard Content -->
     <main>
         <section class="dashboard-content">
-            <h2 class="section-left">Dashboard</h2>
-            <!-- Apps or content will go here in the future -->
+            <h2 class="section-left">Security Challenges</h2>
+            <div class="apps-grid">
+                <div class="app-card" data-app="notes">
+                    <h3>Notes App</h3>
+                    <p>Test for XSS and SQLi vulnerabilities in a note-taking application</p>
+                    <span class="difficulty">Difficulty: Easy</span>
+                </div>
+                
+                <div class="app-card" data-app="upload">
+                    <h3>File Upload</h3>
+                    <p>Exploit file upload vulnerabilities and bypass filters</p>
+                    <span class="difficulty">Difficulty: Medium</span>
+                </div>
+            
+                <div class="app-card" data-app="chat">
+                    <h3>Chat Room</h3>
+                    <p>Find vulnerabilities in a real-time chat application</p>
+                    <span class="difficulty">Difficulty: Hard</span>
+                </div>
+            
+                <div class="app-card" data-app="api">
+                    <h3>REST API</h3>
+                    <p>Test API endpoints for security misconfigurations</p>
+                    <span class="difficulty">Difficulty: Medium</span>
+                </div>
+            </div>
+            <div id="app-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="modal-title">App Title</h3>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <div class="modal-body" id="app-container">
+                        <!-- App content will be loaded here -->
+                    </div>
+                </div>
+            </div> 
         </section>
     </main>
 </body>
