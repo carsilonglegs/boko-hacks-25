@@ -239,27 +239,47 @@
   font-weight: bold;
 }
 
-.dashboard-grid {
+/* Add to styles.css */
+.apps-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
 
-.dashboard-widget {
+.app-card {
   background: var(--white);
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: var(--gray-dark);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent;
 }
 
-.dashboard-widget h3 {
+.app-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-color: var(--maroon);
+}
+
+.app-card h3 {
   color: var(--maroon);
-  margin-top: 0;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem 0;
   font-size: 1.2rem;
 }
 
-.widget-content {
-  min-height: 200px;
+.app-card p {
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.difficulty {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  background: var(--gray-light);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--gray-dark);
 }
