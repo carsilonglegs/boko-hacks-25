@@ -8,18 +8,24 @@
 </head>
 <body>
     <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    
     <!-- Header Section -->
     <header class="dashboard-header">
-        <h1>Welcome Admin, {{ username }}</h1>
+        <h1>Welcome, {{ username }}</h1>
+        <nav>
+          <ul>
+            <li><a href="{{ url_for('hub.hub') }}" class="active">Dashboard</a></li>
+            <li><a href="{{ url_for('login.logout') }}" class="logout-link">Logout</a></li>
+          </ul>
+        </nav>
     </header>
     
-    <!-- Search and Logout Section -->
-    <div class="search-logout-container">
+    <!-- Search Section (Removed Extra Logout) -->
+    <div class="search-container">
         <form class="search-bar" method="GET" action="{{ url_for('hub.hub') }}">
             <input type="text" name="query" placeholder="Search..." value="{{ request.args.get('query', '') }}">
             <button type="submit">Search</button>
         </form>
-        <a href="{{ url_for('login.logout') }}" class="logout-link">Logout</a>
     </div>
 
     <!-- Dashboard Content -->

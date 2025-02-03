@@ -4,26 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-  <title>Home - BokoHacks</title>
+  <title>About - BokoHacks</title>
 </head>
 <body>
   <header>
-    <h1>Welcome to BokoHacks</h1>
+    <h1>About BokoHacks</h1>
     <nav>
       <ul>
-        <li><a href="{{ url_for('home.home') }}" class="active">Home</a></li>
+        <li><a href="{{ url_for('home.home') }}">Home</a></li>
         <li><a href="{{ url_for('login.login') }}">Login</a></li>
         <li><a href="{{ url_for('register.register') }}">Register</a></li>
-        <li><a href="{{ url_for('about.about') }}">About</a></li>
+        <li><a href="{{ url_for('about.about') }}" class="active">About</a></li>
       </ul>
     </nav>
   </header>
   <main>
     <section>
-      <h2>Join the Challenge</h2>
-      <p>Test your cybersecurity and ethical hacking skills.</p>
-      <a href="{{ url_for('login.login') }}"><button>Login</button></a>
-      <a href="{{ url_for('register.register') }}"><button>Register</button></a>
+      <h2>What is BokoHacks?</h2>
+      <p>BokoHacks is a cybersecurity challenge designed to test your skills in penetration testing, secure coding, and vulnerability detection.</p>
     </section>
   </main>
   <footer>
