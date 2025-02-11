@@ -44,4 +44,34 @@ def login():
         else:
             flash('Invalid username or password')
     
-    return render_template('login template HERE')
+    return render_template('adminlogin.html')
+
+@app.route('/register', methods =['GET', 'POST'])
+
+def register():
+    if request.method =='POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute('INSER INTO users (username, paswrod) VALUES (?,?)',(username,password))
+            conn.commit()
+            flash('Registration success! now login.', 'success')
+        except:
+            flash('Username already exists', 'danger')
+
+        conn.close()
+        return redirect('/')
+    return render_template('register.html')
+
+@app.route('/dashboard')
+def dashboard():
+    if 'username' not in session:
+        return redirect('/')
+    return f"Welcome, {session['username']}!<br><a href='/logout'>Logout</a>"
+
+
