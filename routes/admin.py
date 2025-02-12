@@ -1,7 +1,8 @@
-from flask import Flask, request, redirect,render_template,session, flash
+from flask import Blueprint, render_template, request, flash, redirect, session, url_for
 import sqlite3
-app = Flask(__name__)
-app.secret_key = 'password'
+admin_bp =Blueprint('admin_bp',__name__)
+
+
 
 #initialize database
 
@@ -21,7 +22,7 @@ init_db()
 
 #vulnerable login 
 
-@app.route('/', methods=['GET','POST'])
+@admin_bp.route('/', methods=['GET','POST'])
 
 def login():
     if request.method == 'POST':
@@ -46,7 +47,7 @@ def login():
     
     return render_template('adminlogin.html')
 
-@app.route('/register', methods =['GET', 'POST'])
+@admin_bp.route('/register', methods =['GET', 'POST'])
 
 def register():
     if request.method =='POST':
@@ -68,7 +69,7 @@ def register():
         return redirect('/')
     return render_template('register.html')
 
-@app.route('/dashboard')
+@admin_bp.route('/dashboard')
 def dashboard():
     if 'username' not in session:
         return redirect('/')
