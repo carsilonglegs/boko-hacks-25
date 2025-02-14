@@ -1,78 +1,50 @@
 from flask import Blueprint, render_template, request, flash, redirect, session, url_for
 import sqlite3
-admin_bp =Blueprint('admin_bp',__name__)
 
+admin_bp = Blueprint("admin", __name__)
 
-
-#initialize database
-
-def init_db():
-    conn = sqlite3.connect('database.db')
+def initialize_admin_database():
+    conn = sqlite3.connect("admin_database.db")
     cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            password TEXT  -- Storing passwords in plaintext (very insecure!)
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
         )
-    ''')
+    """)
     conn.commit()
     conn.close()
 
-init_db()
+# Initialize the database when the app starts
+initialize_admin_database()
 
-#vulnerable login 
-
-@admin_bp.route('/', methods=['GET','POST'])
-
+@admin_bp.route("/admin", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
 
-        #SQL INJECTION HERE
-
-        conn = sqlite3.connect('database.db')
+        # SQL INJECTION VULNERABILITY ALLOWS BYPASS
+        conn = sqlite3.connect("admin_database.db")
         cursor = conn.cursor()
-        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-        cursor.execute(query) # inserting user input into SQL 
+        query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}' OR '1'='1'"
+        cursor.execute(query)  # Directly using user input in SQL
         user = cursor.fetchone()
         conn.close()
 
         if user:
-            #weak management
-            session['username'] = username 
-            return redirect('/dashboard')
+            # WEAK SESSION MANAGEMENT REMAINS
+            session["admin_user"] = username
+            flash("Admin login successful!", "success")
+            return redirect(url_for("admin.dashboard"))
         else:
-            flash('Invalid username or password')
-    
-    return render_template('adminlogin.html')
+            flash("Invalid username or password.", "error")
 
-@admin_bp.route('/register', methods =['GET', 'POST'])
+    return render_template("admin_login.html")
 
-def register():
-    if request.method =='POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        confirm_password = request.form.get('confirm_password')
-        
-        conn = sqlite3.connect('database.db')
-        cursor = conn.cursor()
-
-        try:
-            cursor.execute('INSER INTO users (username, paswrod) VALUES (?,?)',(username,password))
-            conn.commit()
-            flash('Registration success! now login.', 'success')
-        except:
-            flash('Username already exists', 'danger')
-
-        conn.close()
-        return redirect('/')
-    return render_template('register.html')
-
-@admin_bp.route('/dashboard')
+@admin_bp.route("/admin-dashboard")
 def dashboard():
-    if 'username' not in session:
-        return redirect('/')
-    return f"Welcome, {session['username']}!<br><a href='/logout'>Logout</a>"
-
-
+    if "admin_user" in session:
+        return render_template("admin_hub.html")
+    return redirect(url_for("admin.login"))

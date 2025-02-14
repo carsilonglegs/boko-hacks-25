@@ -11,9 +11,9 @@
     <h1>Admin Login</h1>
     <nav>
       <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/admin" class="active">Login</a></li>
-        <li><a href="/register">Register</a></li>
+        
+        <li><a href="{{ url_for('hub.hub') }}" class="active">Dashboard</a></li>
+        <li><a href="{{ url_for('home.home') }}">Home</a></li>
         <li><a href="/about">About</a></li>
       </ul>
     </nav>
@@ -32,7 +32,7 @@
     <section>
       <h2>Welcome To Admin Login</h2>
       <p>Please login to access The Admin Page</p>
-      <form action="/login" method="POST">
+      <form action="/admin" method="POST">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" placeholder="Enter your admin username" required>
         
@@ -41,7 +41,7 @@
         
         <button type="submit">Login</button>
       </form>
-      <p>Don't have an account? <a href="/register">Register here</a>.</p>
+      <p>Don't have an account? <a href="/admin_register">Admin Register here</a>.</p>
     </section>
   </main>
   <footer>
