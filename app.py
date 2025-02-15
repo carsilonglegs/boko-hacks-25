@@ -6,9 +6,8 @@ from routes.login import login_bp
 from routes.register import register_bp
 from routes.about import about_bp
 from routes.apps import apps_bp
-from routes.admin import admin_bp
-from routes.admin_register import adminRegister_bp
 from routes.notes import notes_bp
+from sqlalchemy import inspect
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
@@ -18,9 +17,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
-with app.app_context():
-    db.create_all()
-
 # Register Blueprints
 app.register_blueprint(home_bp)
 app.register_blueprint(hub_bp)
@@ -28,9 +24,21 @@ app.register_blueprint(login_bp)
 app.register_blueprint(register_bp)
 app.register_blueprint(about_bp)
 app.register_blueprint(apps_bp)
-app.register_blueprint(admin_bp)
-app.register_blueprint(adminRegister_bp)
 app.register_blueprint(notes_bp)
+
+with app.app_context():
+    db.create_all()
+    # Debug: Print all tables
+    inspector = inspect(db.engine)
+    print("Database tables:", inspector.get_table_names())
+    
+    # Additional debug info
+    if 'notes' in inspector.get_table_names():
+        print("Notes table exists with columns:")
+        for column in inspector.get_columns('notes'):
+            print(f"- {column['name']}: {column['type']}")
+    else:
+        print("Notes table does not exist!")
 
 if __name__ == "__main__":
     app.run(debug=True)

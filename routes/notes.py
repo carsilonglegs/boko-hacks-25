@@ -10,6 +10,9 @@ notes_bp = Blueprint('notes', __name__, url_prefix='/apps/notes')
 def notes():
     """Render notes page with all notes"""
     all_notes = Note.query.order_by(Note.created_at.desc()).all()
+    print(f"Loading notes page - Found {len(all_notes)} notes")  # Debug print
+    for note in all_notes:
+        print(f"Note {note.id}: {note.title}")  # Debug print
     return render_template('notes.html', notes=all_notes)
 
 @notes_bp.route('/create', methods=['POST'])
@@ -19,6 +22,7 @@ def create_note():
     content = request.form.get('content')
     
     try:
+        print(f"Creating note - Title: {title}, Content: {content}")  # Debug print
         note = Note(
             title=title,  # No sanitization
             content=content,  # No sanitization
@@ -26,6 +30,7 @@ def create_note():
         )
         db.session.add(note)
         db.session.commit()
+        print(f"Note created with ID: {note.id}")  # Debug print
         
         return jsonify({
             'success': True,
