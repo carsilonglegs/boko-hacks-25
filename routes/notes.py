@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, jsonify
 from extensions import db
 from models.note import Note
 from datetime import datetime
-from sqlalchemy import text
+from sqlalchemy import or_
 
 notes_bp = Blueprint('notes', __name__, url_prefix='/apps/notes')
 
@@ -42,27 +42,23 @@ def create_note():
 
 @notes_bp.route('/search')
 def search_notes():
-    """Search notes - Intentionally vulnerable to SQL injection"""
+    """Search notes using SQLAlchemy"""
     query = request.args.get('q', '')
     
     try:
-        # WARNING: This is intentionally vulnerable to SQL injection
-        # Note: Added quotes around the query parameter
-        sql = text(f"SELECT id, title, content, created_at FROM notes WHERE title LIKE '%{query}%' OR content LIKE '%{query}%'")
-        print(f"Executing SQL query: {sql}")  # Debug print
-        
-        result = db.session.execute(sql)
-        notes = []
-        for row in result:
-            notes.append({
-                'id': row[0],
-                'title': row[1],
-                'content': row[2],
-                'created_at': row[3].strftime('%Y-%m-%d %H:%M:%S') if row[3] else None
-            })
+        # Using SQLAlchemy's query builder
+        notes = Note.query.filter(
+            or_(
+                Note.title.like(f"%{query}%"),
+                Note.content.like(f"%{query}%")
+            )
+        ).all()
         
         print(f"Found {len(notes)} matching notes")  # Debug print
-        return jsonify({'success': True, 'notes': notes})
+        return jsonify({
+            'success': True,
+            'notes': [note.to_dict() for note in notes]
+        })
     except Exception as e:
         print(f"Error searching notes: {e}")
         return jsonify({'success': False, 'error': str(e)}), 500
