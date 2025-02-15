@@ -2,7 +2,7 @@
 <div class="notes-app">
     <div class="notes-header">
         <h2>SecureNotes v0.1-beta</h2>
-        <p class="app-desc">A totally secure note-taking application for storing your secrets!</p>
+        <p class="app-desc">A totally secure note-taking application</p>
         <!-- TODO: Implement input validation before production. Should be fine for beta testing though. -->
         <!-- Note to dev team: Client requested we remove script filtering to support custom formatting -->
     </div>
@@ -44,7 +44,7 @@
                 <div class="note-content">{{ note.content | safe }}</div>
                 <div class="note-meta">
                     ID: {{ note.id }} | Created: {{ note.created_at }}
-                    <button onclick="deleteNote({{ note.id }})">Delete</button>
+                    <button onclick="deleteNote('{{ note.id }}')">Delete</button>
                 </div>
             </div>
             {% endfor %}
@@ -237,16 +237,16 @@ function searchNotes() {
         });
 }
 
-function deleteNote(id) {
+function deleteNote(noteId) {
     if (confirm('Delete this note?')) {
-        fetch(`/apps/notes/delete/${id}`, { 
+        fetch(`/apps/notes/delete/${noteId}`, { 
             method: 'DELETE',
             // TODO: Add CSRF token before production
         })
         .then(response => response.json())
         .then(data => {
             if(data.success) {
-                const noteElement = document.querySelector(`.note-card:has(button[onclick="deleteNote(${id})"])`);
+                const noteElement = document.querySelector(`.note-card:has(button[onclick="deleteNote('${noteId}')"])`);
                 if(noteElement) {
                     noteElement.remove();
                 }
