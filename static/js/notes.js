@@ -84,27 +84,36 @@ function searchNotes() {
         .then(data => {
             console.log('Search results:', data);
             const notesList = document.getElementById('notes-list');
-            notesList.innerHTML = data.notes.map(note => `
-                <div class="note-card">
-                    <h3>${note.title}</h3>
-                    <div class="note-content">${note.content}</div>
-                    <div class="note-meta">
-                        ID: ${note.id} | Created: ${note.created_at}
-                        <button type="button" class="delete-note" data-note-id="${note.id}">Delete</button>
+            
+            if (data.success && Array.isArray(data.notes)) {
+                notesList.innerHTML = data.notes.map(note => `
+                    <div class="note-card">
+                        <h3>${note.title}</h3>
+                        <div class="note-content">${note.content}</div>
+                        <div class="note-meta">
+                            ID: ${note.id} | Created: ${note.created_at}
+                            <button type="button" class="delete-note" data-note-id="${note.id}">Delete</button>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `).join('');
 
-            // Reattach delete handlers to new notes
-            document.querySelectorAll('.delete-note').forEach(button => {
-                button.addEventListener('click', function() {
-                    const noteId = this.getAttribute('data-note-id');
-                    deleteNote(noteId);
+                // Reattach delete handlers to new notes
+                document.querySelectorAll('.delete-note').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const noteId = this.getAttribute('data-note-id');
+                        deleteNote(noteId);
+                    });
                 });
-            });
+            } else {
+                // Handle error case
+                notesList.innerHTML = '<div class="note-card"><p>No notes found matching your search.</p></div>';
+                console.error('Search failed:', data.error);
+            }
         })
         .catch(err => {
             console.error('Query error:', err);
+            const notesList = document.getElementById('notes-list');
+            notesList.innerHTML = '<div class="note-card"><p>An error occurred while searching notes.</p></div>';
         });
 }
 

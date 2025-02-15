@@ -47,23 +47,25 @@ def search_notes():
     
     try:
         # WARNING: This is intentionally vulnerable to SQL injection
-        sql = text(f"SELECT * FROM notes WHERE title LIKE '%{query}%' OR content LIKE '%{query}%'")
-        result = db.session.execute(sql)
+        # Note: Added quotes around the query parameter
+        sql = text(f"SELECT id, title, content, created_at FROM notes WHERE title LIKE '%{query}%' OR content LIKE '%{query}%'")
+        print(f"Executing SQL query: {sql}")  # Debug print
         
-        notes = [
-            {
+        result = db.session.execute(sql)
+        notes = []
+        for row in result:
+            notes.append({
                 'id': row[0],
                 'title': row[1],
                 'content': row[2],
-                'created_at': row[3].strftime('%Y-%m-%d %H:%M:%S')
-            }
-            for row in result
-        ]
+                'created_at': row[3].strftime('%Y-%m-%d %H:%M:%S') if row[3] else None
+            })
         
-        return jsonify({'notes': notes})
+        print(f"Found {len(notes)} matching notes")  # Debug print
+        return jsonify({'success': True, 'notes': notes})
     except Exception as e:
         print(f"Error searching notes: {e}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @notes_bp.route('/delete/<int:note_id>', methods=['DELETE'])
 def delete_note(note_id):
