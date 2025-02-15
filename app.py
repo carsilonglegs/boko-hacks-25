@@ -6,6 +6,8 @@ from routes.login import login_bp
 from routes.register import register_bp
 from routes.about import about_bp
 from routes.apps import apps_bp
+from routes.admin import admin_bp
+from routes.admin_register import adminRegister_bp
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
@@ -22,6 +24,8 @@ app.register_blueprint(login_bp)
 app.register_blueprint(register_bp)
 app.register_blueprint(about_bp)
 app.register_blueprint(apps_bp)
+app.register_blueprint(admin_bp)
+app.register_blueprint(adminRegister_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)
