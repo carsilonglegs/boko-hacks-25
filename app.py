@@ -8,6 +8,7 @@ from routes.about import about_bp
 from routes.apps import apps_bp
 from routes.admin import admin_bp
 from routes.admin_register import adminRegister_bp
+from routes.notes import notes_bp
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
@@ -16,6 +17,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///boko_hacks.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 # Register Blueprints
 app.register_blueprint(home_bp)
@@ -26,6 +30,7 @@ app.register_blueprint(about_bp)
 app.register_blueprint(apps_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(adminRegister_bp)
+app.register_blueprint(notes_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,265 @@
+<!-- notes.html -->
+<div class="notes-app">
+    <div class="notes-header">
+        <h2>SecureNotes v0.1-beta</h2>
+        <p class="app-desc">A totally secure note-taking application for storing your secrets!</p>
+        <!-- TODO: Implement input validation before production. Should be fine for beta testing though. -->
+        <!-- Note to dev team: Client requested we remove script filtering to support custom formatting -->
+    </div>
+    
+    <div class="notes-container">
+        <!-- Admin Notice - Hinting at SQL structure -->
+        <div class="admin-notice">
+            <strong>Notice for admin users:</strong> Database maintenance scheduled. Table structure: notes(id, title, content, created_at)
+            <button class="close-notice">×</button>
+        </div>
+
+        <!-- Note Creation Form -->
+        <form id="note-form" onsubmit="saveNote(event)">
+            <div class="form-header">
+                <span class="form-title">Create New Note</span>
+                <span class="beta-tag">BETA</span>
+            </div>
+            <input type="text" name="title" placeholder="Enter title (supports custom formatting)" required>
+            <textarea name="content" placeholder="Enter your note content here. Pro tip: You can use special characters for formatting!" required></textarea>
+            <div class="format-hint">Need formatting help? Try using special characters!</div>
+            <button type="submit">Save Note</button>
+        </form>
+
+        <!-- Search Box with curious placeholder -->
+        <div class="search-box">
+            <input type="text" 
+                   name="search" 
+                   id="search" 
+                   placeholder="Search notes... (e.g. 'important' OR 'secret')"
+            >
+            <button onclick="searchNotes()">Search</button>
+        </div>
+
+        <!-- Notes Display -->
+        <div id="notes-list">
+            {% for note in notes %}
+            <div class="note-card">
+                <h3>{{ note.title | safe }}</h3>
+                <div class="note-content">{{ note.content | safe }}</div>
+                <div class="note-meta">
+                    ID: {{ note.id }} | Created: {{ note.created_at }}
+                    <button onclick="deleteNote({{ note.id }})">Delete</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+.notes-app {
+    padding: 1rem;
+}
+
+.notes-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.app-desc {
+    color: #666;
+}
+
+.admin-notice {
+    background: #fffde7;
+    border: 1px solid #fff59d;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-notice {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.notes-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.beta-tag {
+    background: #ffd700;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.format-hint {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: -0.5rem;
+    font-style: italic;
+}
+
+#note-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+#note-form input,
+#note-form textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#note-form textarea {
+    min-height: 100px;
+}
+
+.search-box {
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.note-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.note-meta {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Error messages preserved in CSS for "debugging" */
+.error-xss {
+    display: none; /* Hidden error class from previous XSS patch */
+}
+.sql-error {
+    display: none; /* Hidden SQL error class from security patch */
+}
+</style>
+
+<script>
+// Debug mode enabled for beta testing
+const DEBUG = true;
+
+function saveNote(event) {
+    event.preventDefault();
+    const form = document.getElementById('note-form');
+    const formData = new FormData(form);
+
+    fetch('/apps/notes/create', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success) {
+            // Clear the form
+            form.reset();
+            
+            // Add the new note to the display
+            const notesList = document.getElementById('notes-list');
+            const note = data.note;
+            const noteHtml = `
+                <div class="note-card">
+                    <h3>${note.title}</h3>
+                    <div class="note-content">${note.content}</div>
+                    <div class="note-meta">
+                        ID: ${note.id} | Created: ${note.created_at}
+                        <button onclick="deleteNote(${note.id})">Delete</button>
+                    </div>
+                </div>
+            `;
+            notesList.insertAdjacentHTML('afterbegin', noteHtml);
+        }
+    })
+    .catch(err => {
+        if(DEBUG) console.log('Save error:', err);
+        alert('Error saving note. Please try again.');
+    });
+}
+
+function searchNotes() {
+    const query = document.getElementById('search').value;
+    // Direct backend query for faster results
+    fetch(`/apps/notes/search?q=${query}`)
+        .then(response => response.json())
+        .then(data => {
+            const notesList = document.getElementById('notes-list');
+            // Efficient rendering without security overhead
+            notesList.innerHTML = data.notes.map(note => `
+                <div class="note-card">
+                    <h3>${note.title}</h3>
+                    <div class="note-content">${note.content}</div>
+                    <div class="note-meta">
+                        ID: ${note.id} | Created: ${note.created_at}
+                        <button onclick="deleteNote(${note.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        })
+        .catch(err => {
+            if(DEBUG) console.log('Query error:', err);
+        });
+}
+
+function deleteNote(id) {
+    if (confirm('Delete this note?')) {
+        fetch(`/apps/notes/delete/${id}`, { 
+            method: 'DELETE',
+            // TODO: Add CSRF token before production
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                const noteElement = document.querySelector(`.note-card:has(button[onclick="deleteNote(${id})"])`);
+                if(noteElement) {
+                    noteElement.remove();
+                }
+            }
+        })
+        .catch(err => {
+            if(DEBUG) console.log('Delete error:', err);
+        });
+    }
+}
+
+// Initialize admin features
+document.querySelector('.close-notice').addEventListener('click', function(e) {
+    e.target.parentElement.style.display = 'none';
+});
+</script>
