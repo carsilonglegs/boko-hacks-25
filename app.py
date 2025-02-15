@@ -7,6 +7,8 @@ from routes.register import register_bp
 from routes.about import about_bp
 from routes.apps import apps_bp
 from routes.notes import notes_bp
+from models.user import User
+from models.note import Note
 from sqlalchemy import inspect
 
 app = Flask(__name__)
@@ -26,19 +28,27 @@ app.register_blueprint(about_bp)
 app.register_blueprint(apps_bp)
 app.register_blueprint(notes_bp)
 
-with app.app_context():
-    db.create_all()
-    # Debug: Print all tables
-    inspector = inspect(db.engine)
-    print("Database tables:", inspector.get_table_names())
-    
-    # Additional debug info
-    if 'notes' in inspector.get_table_names():
-        print("Notes table exists with columns:")
-        for column in inspector.get_columns('notes'):
-            print(f"- {column['name']}: {column['type']}")
-    else:
-        print("Notes table does not exist!")
+def setup_database():
+    """Setup database and print debug info"""
+    with app.app_context():
+        # Create tables only if they don't exist
+        inspector = inspect(db.engine)
+        existing_tables = inspector.get_table_names()
+        
+        if not existing_tables:
+            print("No existing tables found. Creating new tables...")
+            db.create_all()
+        else:
+            print("Existing tables found:", existing_tables)
+        
+        # Print schema for notes table
+        if 'notes' in inspector.get_table_names():
+            print("\nNotes table columns:")
+            for column in inspector.get_columns('notes'):
+                print(f"- {column['name']}: {column['type']}")
+        else:
+            print("Notes table does not exist!")
 
 if __name__ == "__main__":
+    setup_database()  # Call setup_database before running the app
     app.run(debug=True)
