@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for, session
 
 apps_bp = Blueprint("apps", __name__)
 
@@ -12,5 +12,10 @@ def load_app(app_name):
         return render_template("chat.html")
     elif app_name == "api":
         return render_template("api.html")
+    elif app_name == "admin":
+        # Return the admin template directly, the template will handle login state
+        return render_template("admin.html", 
+                             is_logged_in=session.get('admin_logged_in', False),
+                             is_default_admin=session.get('is_default_admin', False))
     else:
         return "<h3>Error</h3><p>Application not found.</p>", 404
