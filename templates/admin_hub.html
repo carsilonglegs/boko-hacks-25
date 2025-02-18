@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <title>Admin Dashboard - BokoHacks</title>
+</head>
+<body>
+
+  <header>
+    <h1>Welcome to The Admin Page</h1>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('home.home') }}" class="active">Home</a></li>
+        <li><a href="{{ url_for('hub.hub') }}" class="active">Dashboard</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ✅ Modal structure copied from the main hub -->
+    <div id="app-modal" class="modal" style="display: block;"> 
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modal-title">Admin Dashboard</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body" id="app-container">
+          <!-- ✅ Dashboard inside modal -->
+          <section>
+            <h2>You're in the admin page</h2>
+            <p>You can now leave the page or log out to test the access control.</p>
+
+            <!-- ✅ Logout Button will keep modal open -->
+            <button id="logout-button">Logout</button>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 BokoHacks | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    document.getElementById("logout-button").addEventListener("click", function(event) {
+        event.preventDefault();
+
+        fetch("/admin-logout", { method: "POST" })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById("app-container").innerHTML = html; // ✅ Show login again inside modal
+        })
+        .catch(error => console.error("Error:", error));
+    });
+
+    // ✅ Handle modal close button
+    document.querySelector(".close-modal").addEventListener("click", function() {
+        document.getElementById("app-modal").style.display = "none";
+    });
+
+    // ✅ Function to open admin dashboard inside modal
+    function openAdminDashboard() {
+        fetch("/admin-dashboard")  // ✅ Fetch dashboard instead of redirecting
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById("app-container").innerHTML = html;  // ✅ Replace modal content
+            document.getElementById("app-modal").style.display = "block"; // ✅ Show modal
+        })
+        .catch(error => console.error("Error:", error));
+    }
+</script>
+
+
+</body>
+</html>

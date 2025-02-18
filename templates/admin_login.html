@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/styles.css">
+  <title>Login - BokoHacks</title>
+</head>
+<body>
+  <header>
+    <h1>Admin Login</h1>
+    <nav>
+      <ul>
+        
+        <li><a href="{{ url_for('hub.hub') }}" class="active">Dashboard</a></li>
+        <li><a href="{{ url_for('home.home') }}">Home</a></li>
+        <li><a href="/about">About</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+  <div id = "admin-login-message"></div>
+  
+    <section>
+      <h2>Welcome To Admin Login</h2>
+      <p>Please login to access The Admin Page</p>
+      <form action="/admin" method="POST">
+        <form id="admin-login-form">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" placeholder="Enter your admin username" required>
+  
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" placeholder="Enter your admin password" required>
+  
+        
+        <button type="submit">Login</button>
+      </form>
+      <p>Don't have an account? <a href="/admin_register">Admin Register here</a>.</p>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 BokoHacks | All Rights Reserved</p>
+  </footer>
+  <script>
+    document.getElementById("admin-login-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // ✅ Prevents page reload
+
+        let formData = new FormData(this);
+
+        fetch("/admin", { method: "POST", body: formData })
+        .then(response => response.text()) // ✅ Expect HTML response
+        .then(html => {
+            let container = document.getElementById("app-container");  
+            let modal = document.getElementById("app-modal");
+
+            if (container && modal) {
+                if (html.includes("Invalid username or password")) {
+                    document.getElementById("admin-login-message").innerHTML =
+                        "<p style='color: red;'>Invalid username or password.</p>";
+                } else {
+                    // ✅ Replace modal content with Admin Hub (NO REDIRECT)
+                    container.innerHTML = html;
+                    modal.style.display = "block";
+                }
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+</script>
+
+</body>
+</html>

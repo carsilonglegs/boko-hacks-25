@@ -187,6 +187,7 @@ def delete_user(user_id):
     try:
         user = User.query.get(user_id)
         if user:
+<<<<<<< HEAD
             db.session.delete(user)
             db.session.commit()
             return jsonify({'success': True, 'message': "User deleted successfully"})
@@ -195,6 +196,12 @@ def delete_user(user_id):
         print(f"Error deleting user: {e}")
         db.session.rollback()
         return jsonify({'success': False, 'message': str(e)})
+=======
+            # WEAK SESSION MANAGEMENT REMAINS
+            session["admin_user"] = username
+            return render_template("admin_hub.html")
+        return render_template("admin_login.html", error="Invalid username or password")    
+>>>>>>> ae4954e (creating modal for admin dashboard(troubleshooting))
 
 @admin_bp.route("/admin/users/reset-password", methods=["POST"])
 def reset_password():
@@ -217,6 +224,7 @@ def reset_password():
         db.session.rollback()
         return jsonify({'success': False, 'message': str(e)})
 
+<<<<<<< HEAD
 @admin_bp.route("/admin/users/add", methods=["POST"])
 def add_user():
     """Add a new regular user"""
@@ -254,3 +262,15 @@ def logout():
     session.pop('admin_username', None)
     session.pop('is_default_admin', None)
     return jsonify({"success": True, "message": "Logged out successfully"})
+=======
+@admin_bp.route("/admin-dashboard")
+def dashboard():
+    if "admin_user" in session:
+        return render_template("admin_hub.html")
+    return render_template("admin_login.html", error="Access denied")
+
+@admin_bp.route("/admin-logout", methods=["POST"])
+def logout():
+    session.pop("admin_user", None)
+    return render_template("admin_login.html")
+>>>>>>> ae4954e (creating modal for admin dashboard(troubleshooting))
