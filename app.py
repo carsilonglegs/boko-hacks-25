@@ -12,6 +12,10 @@ from models.user import User
 from models.note import Note
 from models.admin import Admin  # Import admin model
 from sqlalchemy import inspect
+from routes.notes import notes_bp
+from models.user import User
+from models.note import Note
+from sqlalchemy import inspect
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"

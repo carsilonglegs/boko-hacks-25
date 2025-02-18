@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <title>Home - BokoHacks</title>
+</head>
+<body>
+  <header>
+    <h1>Welcome to The Admin Page </h1>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('home.home') }}" class="active">Home</a></li>
+        <li><a href="{{ url_for('hub.hub') }}" class="active">Dashboard</a></li>
+        
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Youre in the admin page</h2>
+      <p>You can now leave the page or log out to test the access control</p>
+      <a href="{{ url_for('admin.login') }}"><button>Logout</button></a>
+      
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 BokoHacks | All Rights Reserved</p>
+  </footer>
+</body>
+</html>
