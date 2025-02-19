@@ -75,10 +75,10 @@ def admin():
         conn = sqlite3.connect("admin_database.db")
         cursor = conn.cursor()
         
-        cursor.execute(
-            "SELECT * FROM admin_credentials WHERE username = ? AND password = ?",
-            (username, password)
-        )
+        #sql injection vulnerablity here 
+        query = f"SELECT * FROM admin_credentials WHERE username = '{username}' AND password = '{password}'"
+        cursor.execute(query)  # This allows SQL injection
+
         admin = cursor.fetchone()
         conn.close()
         
