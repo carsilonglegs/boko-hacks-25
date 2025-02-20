@@ -23,5 +23,6 @@ def login():
 @login_bp.route("/logout")
 def logout():
     session.pop("user", None)
+    session.pop('_flashes',None)
     flash("You have been logged out.", "info")
     return redirect(url_for("login.login"))
