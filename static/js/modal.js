@@ -34,6 +34,7 @@ class AppModal {
             script.src = `/static/js/${appName}.js`;
             script.onload = () => resolve();
             script.onerror = () => reject();
+            script.dataset.appName = appName; //Tags script for removal
             document.head.appendChild(script);
         });
     }
@@ -45,9 +46,15 @@ class AppModal {
         try {
             // Load the app content
             const response = await fetch(`/apps/${appPath}`);
+            if(!response.ok) throw new Error('Failed to load ${appPath}');
             const appContent = await response.text();
             this.appContainer.innerHTML = appContent;
             
+            console.log('Opening app: ${appPAth}');
+            this.logCurrentScripts("Before script cleanup");
+
+            this.cleanupPreviousApp();
+
             // Load app-specific JavaScript if it exists
             try {
                 await this.loadAppScript(appPath);
@@ -57,10 +64,16 @@ class AppModal {
             }
 
             this.modal.style.display = 'block';
+
+            this.logCurrentScripts("After script load");
             
             // Initialize app if function exists
-            if (window.initializeApp) {
-                window.initializeApp();
+            if (typeof window.initializeApp === "function") {
+                try {
+                    window.initializeApp();
+                } catch (error) {
+                    console.error('Error in initializeApp:', error);
+                }
             }
         } catch (error) {
             console.error('Error loading app:', error);
@@ -69,17 +82,49 @@ class AppModal {
     }
 
     closeModal() {
+        console.log('Closing modal for app: ${this.currentApp}');
+
+
         this.modal.style.display = 'none';
         this.appContainer.innerHTML = '';
-        this.currentApp = null;
         
-        // Clean up any app-specific scripts
-        const appScripts = document.querySelectorAll('script[src^="/static/js/"]');
-        appScripts.forEach(script => {
-            if (script.src.includes(this.currentApp)) {
-                script.remove();
+        this.cleanupPreviousApp();
+
+        this.logCurrentScripts("After modal Close");
+    }
+    cleanupPreviousApp() {
+        console.log("Cleaning up previous app...");
+
+        // Call app-specific cleanup function if available
+        if (typeof window.cleanupApp === "function") {
+            try {
+                console.log("Executing cleanupApp...");
+                window.cleanupApp();
+            } catch (error) {
+                console.error('Error in cleanupApp:', error);
             }
+        }
+        console.log("Removing dynamically added scripts...");
+        document.querySelectorAll('script[data-app-name]').forEach(script => {
+            console.log(`Removing script: ${script.src}`);
+            script.remove();
         });
+
+        // Remove lingering global variables & force garbage collection
+        console.log("Removing global references: initializeApp and cleanupApp");
+        window.initializeApp = undefined ;
+        window.cleanupApp = undefined ;
+
+    
+    }
+    logCurrentScripts(context) {
+        console.log(`=== ${context} ===`);
+        const scripts = document.querySelectorAll('script[data-app-name]');
+        if (scripts.length === 0) {
+            console.log("No dynamically loaded scripts found.");
+        } else {
+            scripts.forEach(script => console.log(`Loaded script: ${script.src}`));
+        }
     }
 }
 
