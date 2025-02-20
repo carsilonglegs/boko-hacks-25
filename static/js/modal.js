@@ -92,6 +92,8 @@ class AppModal {
 
         this.logCurrentScripts("After modal Close");
     }
+    
+    //removes the script previously used 
     cleanupPreviousApp() {
         console.log("Cleaning up previous app...");
 

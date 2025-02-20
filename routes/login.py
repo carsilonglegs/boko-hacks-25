@@ -23,10 +23,6 @@ def login():
 @login_bp.route("/logout")
 def logout():
     session.pop("user", None)
-<<<<<<< Updated upstream
-    session.pop("_flashes", None)
-=======
     session.pop('_flashes',None)
->>>>>>> Stashed changes
     flash("You have been logged out.", "info")
     return redirect(url_for("login.login"))

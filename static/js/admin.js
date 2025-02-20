@@ -182,14 +182,25 @@ function initializeApp() {
     // Handle logout
     async function handleLogout() {
         try {
-            await fetch('/admin/logout');
-            document.getElementById('login-section').style.display = 'block';
-            document.getElementById('admin-panel').style.display = 'none';
-            showMessage('Logged out successfully', 'success');
+            const response = await fetch('/admin/logout', {
+                method: 'POST',  
+                headers: { 'Content-Type': 'application/json' }
+            });
+    
+            const data = await response.json();
+    
+            if (data.success) {
+                document.getElementById('login-section').style.display = 'block';
+                document.getElementById('admin-panel').style.display = 'none';
+                showMessage('Logged out successfully', 'success');
+            } else {
+                showMessage(data.message);
+            }
         } catch (error) {
             showMessage('Failed to logout');
         }
     }
+    
 
     // Function to update user list
     async function updateUserList() {
