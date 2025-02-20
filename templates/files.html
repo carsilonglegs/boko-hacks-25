@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>File Upload</h1>
+    </header>
+
+    <div class="file-upload-container">
+        <form id="file-upload-form" enctype="multipart/form-data">
+            <input type="file" name="file" id="file" required>
+            <button type="submit">Upload File</button>
+        </form>
+    </div>
+
+    <div class="file-list">
+        <h2>Your Uploaded Files</h2>
+        <ul id="file-list">
+            {% for file in files %}
+            <li>
+                <p>{{ file.filename }} (Uploaded: {{ file.uploaded_at }})</p>
+                <button class="delete-file" data-file-id="{{ file.id }}">Delete</button>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/files.js') }}"></script>
+</body>
+</html>

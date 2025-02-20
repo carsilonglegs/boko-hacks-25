@@ -8,6 +8,7 @@ from routes.about import about_bp
 from routes.apps import apps_bp
 from routes.notes import notes_bp
 from routes.admin import admin_bp  # Import admin blueprint
+from routes.files import files_bp # Import the files blueprint
 from models.user import User
 from models.note import Note
 from models.admin import Admin  # Import admin model
@@ -34,6 +35,7 @@ app.register_blueprint(about_bp)
 app.register_blueprint(apps_bp)
 app.register_blueprint(notes_bp)
 app.register_blueprint(admin_bp)  # Register admin blueprint
+app.register_blueprint(files_bp)
 
 def setup_database():
     """Setup database and print debug info"""
