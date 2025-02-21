@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, session
+from flask import Blueprint, render_template, request, jsonify, session 
 from extensions import db
 from models.user import User
 from models.file import File
@@ -40,12 +40,15 @@ def upload_file():
         return jsonify({'success': False, 'error': 'User not found'}), 404
 
     file = request.files.get('file')
+    print("Received file:", file)  # Debugging line
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file_path = os.path.join(UPLOAD_FOLDER, filename)
+        print("File path:", file_path)  # Debugging line
         
         try:
             file.save(file_path)
+            print("File saved successfully")  # Debugging line
 
             # Save file metadata in the database
             new_file = File(
@@ -58,11 +61,14 @@ def upload_file():
 
             return jsonify({
                 'success': True,
+                'message': 'File uploaded successfully!',
                 'file': new_file.to_dict()
             })
         except Exception as e:
+            print("Error saving file:", str(e))  # Debugging line
             return jsonify({'success': False, 'error': str(e)}), 500
     else:
+        print("File type not allowed or no file uploaded")  # Debugging line
         return jsonify({'success': False, 'error': 'File type not allowed'}), 400
 
 @files_bp.route('/delete/<int:file_id>', methods=['DELETE'])

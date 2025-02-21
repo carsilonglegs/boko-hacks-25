@@ -11,17 +11,27 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
+            console.log("Upload response:", data); // Debugging
             if (data.success) {
-                alert('File uploaded successfully');
-                location.reload();
+                showMessage("success", "File uploaded successfully!");
+                setTimeout(() => location.reload(), 1500); // Reload after showing message
             } else {
-                alert('Error uploading file: ' + data.error);
+                showMessage("error", "Error uploading file: " + data.error);
             }
         })
         .catch(err => {
-            console.error('Error:', err);
-            alert('Error uploading file');
+            console.error("Error:", err);
+            showMessage("error", "Error uploading file");
         });
+        
+        // Unified message function
+        function showMessage(type, message) {
+            const msg = document.createElement('div');
+            msg.classList.add(type === "success" ? 'success-message' : 'error-message');
+            msg.textContent = message;
+            document.getElementById('message-container').appendChild(msg); // Append to the message container
+            setTimeout(() => msg.remove(), 3000); // Remove after 3 seconds
+        }
     });
 
     // Handle file deletion
@@ -47,3 +57,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
