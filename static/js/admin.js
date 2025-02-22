@@ -26,12 +26,15 @@ function initializeApp() {
             </div>
             <div id="admin-panel" style="display: none;">
                 <div class="space-y-6">
-                    <div class="flex justify-between items-center">
-                        <h2 class="text-2xl font-bold text-gray-800">Admin Management</h2>
-                        <button id="logout-button" class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">
+                    <h2 class="text-2xl font-bold text-gray-800 text-center">Admin Management</h2>
+
+                    <!-- Logout button moved to its own div to match Add User & Add Admin -->
+                    <div class="flex flex-col space-y-4">
+                        <button id="logout-button" class="btn">
                             Logout
-                        </button>
+                         </button>
                     </div>
+                </div>
                     
                     <!-- User Management Section -->
                     <div class="bg-white p-6 rounded-lg shadow-md">
@@ -124,7 +127,7 @@ function initializeApp() {
                 document.getElementById('login-section').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
                 updateAdminList(data.admins);
-                showMessage('Login successful', 'success');
+                showMessage(data.message, 'success');// Directly injects html
             } else {
                 showMessage(data.message);
             }
@@ -211,19 +214,19 @@ function initializeApp() {
             if (data.success) {
                 const userList = document.getElementById('user-list');
                 userList.innerHTML = data.users.map(user => `
-                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-md">
-                        <span class="font-medium">${user.username}</span>
-                        <div class="space-x-2">
-                            <button onclick="resetPassword(${user.id})" 
-                                    class="px-3 py-1 text-blue-600 hover:bg-blue-50 rounded-md">
-                                Reset Password
-                            </button>
-                            <button onclick="deleteUser(${user.id})"
-                                    class="px-3 py-1 text-red-600 hover:bg-red-50 rounded-md">
-                                Delete
-                            </button>
-                        </div>
+                  <div class="flex justify-between items-center p-3 bg-gray-50 rounded-md">
+                    <span class="font-medium">${user.username}</span>
+                    <div class="space-x-2">
+                        <button onclick="resetPassword(${user.id})" 
+                                class="btn">
+                            Reset Password
+                        </button>
+                        <button onclick="deleteUser(${user.id})"
+                                class="btn">
+                            Delete
+                        </button>
                     </div>
+                </div>  
                 `).join('');
             }
         } catch (error) {
@@ -317,6 +320,7 @@ function handleLoginSuccess(data) {
     document.getElementById('add-admin-form').addEventListener('submit', handleAddAdmin);
     document.getElementById('add-user-form').addEventListener('submit', handleAddUser);
     document.getElementById('logout-button').addEventListener('click', handleLogout);
+    document.gettElementById('close-modal').addEventListener('click', handleLogout)
 
     // Check initial login status
     fetch('/admin-check')
