@@ -339,12 +339,12 @@
 .app-container {
   min-height: 400px;
 }
-a.btn {
+a.btn,button.btn {
   display: inline-block;
   background-color: var(--maroon);
   color: var(--white);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: normal;
   padding: 0.5rem 1rem;
   border: 1px solid var(--white);
   border-radius: 4px;
