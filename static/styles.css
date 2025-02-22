@@ -339,3 +339,19 @@
 .app-container {
   min-height: 400px;
 }
+a.btn {
+  display: inline-block;
+  background-color: var(--maroon);
+  color: var(--white);
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--white);
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  font-size: 1rem;
+}
+
+a.btn:hover {
+  background-color: var(--maroon-light);
+}
