@@ -80,7 +80,7 @@ function initializeApp() {
             </div>
         </div>
     `;
-
+    
     // Show message in the message area
     function showMessage(message, type = 'error') {
         const messageArea = document.getElementById('message-area');
@@ -102,7 +102,7 @@ function initializeApp() {
                     ${admin[2] ? '<span class="ml-2 px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Default Admin</span>' : ''}
                 </div>
                 ${!admin[2] ? `
-                    <button onclick="window.removeAdmin(${admin[0]})" class="px-3 py-1 text-red-600 hover:bg-red-50 rounded-md">
+                    <button onclick="window.removeAdmin(${admin[0]})" class="btn">
                         Remove
                     </button>
                 ` : ''}
@@ -210,6 +210,8 @@ function initializeApp() {
         try {
             const response = await fetch('/admin/users');
             const data = await response.json();
+
+            console.log("User List API Response", data);
             
             if (data.success) {
                 const userList = document.getElementById('user-list');
@@ -228,8 +230,11 @@ function initializeApp() {
                     </div>
                 </div>  
                 `).join('');
+            }else{
+                console.error("User list did not retrun success:",data);
             }
         } catch (error) {
+            console.error("Error fetching users:",error);
             showMessage('Failed to load users');
         }
     }
@@ -320,7 +325,7 @@ function handleLoginSuccess(data) {
     document.getElementById('add-admin-form').addEventListener('submit', handleAddAdmin);
     document.getElementById('add-user-form').addEventListener('submit', handleAddUser);
     document.getElementById('logout-button').addEventListener('click', handleLogout);
-    document.gettElementById('close-modal').addEventListener('click', handleLogout)
+    document.getElementById('close-modal').addEventListener('click', handleLogout)
 
     // Check initial login status
     fetch('/admin-check')
