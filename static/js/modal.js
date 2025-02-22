@@ -18,12 +18,13 @@ class AppModal {
             }
         });
 
+        // This is the new block you need to add to handle the app-card clicks
         document.querySelectorAll('.app-card').forEach(card => {
             card.addEventListener('click', (e) => {
                 e.preventDefault();
                 const appTitle = card.querySelector('h3').textContent;
                 const appPath = card.getAttribute('data-app');
-                this.openApp(appTitle, appPath);
+                this.openApp(appTitle, appPath); // This will call the openApp function to display the app
             });
         });
     }

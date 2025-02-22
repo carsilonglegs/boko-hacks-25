@@ -7,7 +7,7 @@ def load_app(app_name):
     if app_name == "notes":
         return render_template("notes.html")
     elif app_name == "upload":
-        return render_template("upload.html")
+        return render_template("files.html")
     elif app_name == "chat":
         return render_template("chat.html")
     elif app_name == "api":
