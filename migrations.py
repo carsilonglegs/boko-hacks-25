@@ -1,4 +1,8 @@
-# migrations.py
+#---------------------------NOTICE---------------------------#
+# This file is for data base migrations and test data creation
+# It will NOT be used in the final version                   #
+#---------------------------NOTICE---------------------------#
+
 from extensions import db
 from models.user import User
 from models.note import Note
@@ -24,7 +28,7 @@ def perform_migration():
 def create_test_data():
     """Create test users and notes with detailed error reporting"""
     try:
-        # First, clear out any existing data
+        # clear out any existing data
         print("\nClearing existing data...")
         Note.query.delete()
         User.query.delete()

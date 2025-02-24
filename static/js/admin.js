@@ -320,7 +320,7 @@ function handleLoginSuccess(data) {
         }
     }
 
-    // Add event listeners
+    // event listeners
     document.getElementById('admin-login-form').addEventListener('submit', handleLogin);
     document.getElementById('add-admin-form').addEventListener('submit', handleAddAdmin);
     document.getElementById('add-user-form').addEventListener('submit', handleAddUser);

@@ -75,7 +75,7 @@ def admin():
         conn = sqlite3.connect("admin_database.db")
         cursor = conn.cursor()
         
-        #sql injection vulnerablity here 
+        #sql vulnerablity here 
         query = f"SELECT * FROM admin_credentials WHERE username = '{username}' AND password = '{password}'"
         cursor.execute(query)  # This allows SQL injection
 
@@ -249,7 +249,7 @@ def add_user():
 
 @admin_bp.route('/admin/logout', methods=['POST'])  # Make sure this endpoint exists
 def logout():
-    #gets rid of all admin id on log out 
+    # gets rid of all admin id on log out 
     session.pop('admin_logged_in', None)
     session.pop('admin_username', None)
     session.pop('is_default_admin', None)

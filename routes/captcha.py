@@ -9,7 +9,7 @@ captcha_bp = Blueprint("captcha", __name__)
 @captcha_bp.route("/captcha/generate", methods=["GET"])
 def get_captcha():
     """Generate a new CAPTCHA image - intentionally simplified"""
-    # Vulnerability: Always use numbers 1-5 in sequence
+    # Vulnerability: hard-coded CAPTCHA text
     captcha_text = "12345"
     
     # Store in session
