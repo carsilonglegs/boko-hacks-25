@@ -8,17 +8,15 @@ captcha_bp = Blueprint("captcha", __name__)
 
 @captcha_bp.route("/captcha/generate", methods=["GET"])
 def get_captcha():
-    """Generate a new CAPTCHA image and store the text in session"""
-    # Generate random captcha text
-    captcha_text = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    """Generate a new CAPTCHA image - intentionally simplified"""
+    # Vulnerability: Always use numbers 1-5 in sequence
+    captcha_text = "12345"
     
-    # Store in session for verification
+    # Store in session
     session['captcha_text'] = captcha_text
     
-    # Generate image
+    # Generate and return image
     image = generate_captcha(captcha_text)
-    
-    # Convert to bytes
     img_io = BytesIO()
     image.save(img_io, 'PNG')
     img_io.seek(0)

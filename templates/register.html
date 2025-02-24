@@ -38,12 +38,11 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" placeholder="Create a password" required>
         
-        <div class="captcha-container">
-          <label for="captcha">Enter CAPTCHA:</label>
-          <img src="{{ url_for('captcha.get_captcha') }}" alt="CAPTCHA" id="captcha-image">
-          <button type="button" onclick="refreshCaptcha()" class="refresh-captcha">↻ Refresh</button>
-          <input type="text" id="captcha" name="captcha" placeholder="Enter the text shown above" required>
+        <label for="captcha">Enter CAPTCHA:</label>
+        <div class="captcha-box">
+          <img src="{{ url_for('captcha.get_captcha') }}" alt="CAPTCHA" class="captcha-image">
         </div>
+        <input type="text" id="captcha" name="captcha" placeholder="Enter the text shown above" required>
         
         <button type="submit">Register</button>
       </form>
@@ -54,37 +53,29 @@
     <p>&copy; 2025 BokoHacks | All Rights Reserved</p>
   </footer>
 
-  <script>
-    function refreshCaptcha() {
-      const captchaImg = document.getElementById('captcha-image');
-      // Add timestamp to prevent caching
-      captchaImg.src = "{{ url_for('captcha.get_captcha') }}?" + new Date().getTime();
-    }
-  </script>
-
   <style>
-    .captcha-container {
-      margin: 1rem 0;
-    }
-    
-    .captcha-container img {
-      display: block;
-      margin: 0.5rem 0;
-      border: 1px solid #ccc;
+    .captcha-box {
+      width: 100%;
+      text-align: center;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #cccccc;
       border-radius: 4px;
+      background: white;
     }
     
-    .refresh-captcha {
-      background: none;
-      border: 1px solid #ccc;
-      padding: 0.25rem 0.5rem;
-      margin-bottom: 0.5rem;
+    .captcha-image {
+      max-width: 200px;
+      height: auto;
+    }
+    
+    form input[type="text"]#captcha {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #cccccc;
       border-radius: 4px;
-      cursor: pointer;
-    }
-    
-    .refresh-captcha:hover {
-      background: #f0f0f0;
+      font-size: 1rem;
     }
   </style>
 </body>
