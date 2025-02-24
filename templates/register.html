@@ -38,6 +38,13 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" placeholder="Create a password" required>
         
+        <div class="captcha-container">
+          <label for="captcha">Enter CAPTCHA:</label>
+          <img src="{{ url_for('captcha.get_captcha') }}" alt="CAPTCHA" id="captcha-image">
+          <button type="button" onclick="refreshCaptcha()" class="refresh-captcha">↻ Refresh</button>
+          <input type="text" id="captcha" name="captcha" placeholder="Enter the text shown above" required>
+        </div>
+        
         <button type="submit">Register</button>
       </form>
       <p>Already have an account? <a href="{{ url_for('login.login') }}">Login here</a>.</p>
@@ -46,5 +53,39 @@
   <footer>
     <p>&copy; 2025 BokoHacks | All Rights Reserved</p>
   </footer>
+
+  <script>
+    function refreshCaptcha() {
+      const captchaImg = document.getElementById('captcha-image');
+      // Add timestamp to prevent caching
+      captchaImg.src = "{{ url_for('captcha.get_captcha') }}?" + new Date().getTime();
+    }
+  </script>
+
+  <style>
+    .captcha-container {
+      margin: 1rem 0;
+    }
+    
+    .captcha-container img {
+      display: block;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    
+    .refresh-captcha {
+      background: none;
+      border: 1px solid #ccc;
+      padding: 0.25rem 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .refresh-captcha:hover {
+      background: #f0f0f0;
+    }
+  </style>
 </body>
 </html>
