@@ -7,15 +7,12 @@ from routes.register import register_bp
 from routes.about import about_bp
 from routes.apps import apps_bp
 from routes.notes import notes_bp
-from routes.admin import admin_bp  # Import admin blueprint
-from routes.files import files_bp # Import the files blueprint
+from routes.admin import admin_bp
+from routes.files import files_bp
+from routes.captcha import captcha_bp  # Add this new import
 from models.user import User
 from models.note import Note
-from models.admin import Admin  # Import admin model
-from sqlalchemy import inspect
-from routes.notes import notes_bp
-from models.user import User
-from models.note import Note
+from models.admin import Admin
 from sqlalchemy import inspect
 
 app = Flask(__name__)
@@ -34,8 +31,9 @@ app.register_blueprint(register_bp)
 app.register_blueprint(about_bp)
 app.register_blueprint(apps_bp)
 app.register_blueprint(notes_bp)
-app.register_blueprint(admin_bp)  # Register admin blueprint
+app.register_blueprint(admin_bp)
 app.register_blueprint(files_bp)
+app.register_blueprint(captcha_bp)  # Add this new blueprint registration
 
 def setup_database():
     """Setup database and print debug info"""
