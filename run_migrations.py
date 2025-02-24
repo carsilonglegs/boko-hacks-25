@@ -1,4 +1,8 @@
-# run_migration.py
+#---------------------------NOTICE---------------------------#
+# This file is for data base migrations and test data creation
+# It will NOT be used in the final version                   #
+#---------------------------NOTICE---------------------------#
+
 from flask import Flask
 from extensions import db
 from migrations import perform_migration, create_test_data
@@ -15,15 +19,12 @@ from routes.about import about_bp
 from routes.apps import apps_bp
 from routes.notes import notes_bp
 
-# Create minimal Flask application
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///boko_hacks.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# Initialize extensions
 db.init_app(app)
 
-# Register blueprints (needed for migrations)
 app.register_blueprint(home_bp)
 app.register_blueprint(hub_bp)
 app.register_blueprint(login_bp)
